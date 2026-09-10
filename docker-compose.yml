@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: givetrack-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: givetrack
+      POSTGRES_USER: givetrack
+      POSTGRES_PASSWORD: givetrack
+    ports:
+      - '5432:5432'
+    volumes:
+      - givetrack_data:/var/lib/postgresql/data
+
+volumes:
+  givetrack_data:
