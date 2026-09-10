@@ -118,6 +118,36 @@ describe('POST /donors', () => {
     );
   });
 
+  it('deve paginar a lista de donors', async () => {
+    await pool.query(
+      `
+      INSERT INTO donors (name, email)
+      VALUES
+        ($1, $2),
+        ($3, $4),
+        ($5, $6)
+      `,
+      [
+        'Doador Paginação 1',
+        'paginacao1@email.com',
+        'Doador Paginação 2',
+        'paginacao2@email.com',
+        'Doador Paginação 3',
+        'paginacao3@email.com'
+      ],
+    );
+
+    const response = await request(app)
+      .get('/donors')
+      .query({
+        page: 1,
+        limit: 2,
+      });
+    
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(2);
+  })
+
   it('deve retornar um donor buscado pelo ID', async () => {
     const donor = await pool.query(
       `INSERT INTO donors (name, email)
