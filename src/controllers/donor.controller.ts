@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createDonorSchema, updateDonorSchema } from '../schemas/donor.schema.js';
+import { createDonorSchema, updateDonorSchema, paginationSchema } from '../schemas/donor.schema.js';
 import {
   createDonorService,
   findAllDonorsService,
@@ -16,9 +16,7 @@ export async function createDonorController(req: Request, res: Response) {
 }
 
 export async function findAllDonorsController(req: Request, res: Response) {
-  const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
-
+  const { page, limit } = paginationSchema.parse(req.query);
   const donors = await findAllDonorsService(page, limit);
 
   return res.status(200).json(donors);
