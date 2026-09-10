@@ -5,6 +5,7 @@ import {
   findDonorById,
   getAllDonors,
   updateDonor,
+  countDonors,
 } from '../repositories/donor.repository.js';
 
 export async function createDonorService(name: string, email: string) {
@@ -17,10 +18,11 @@ export async function createDonorService(name: string, email: string) {
   return createDonor(name, email);
 }
 
-export async function findAllDonorsService(page: number, limit: number) {
-  const donors = await getAllDonors(page, limit);
+export async function findAllDonorsService(page: number, limit: number, name?: string,) {
+  const donors = await getAllDonors(page, limit, name);
+  const total = await countDonors(name);
 
-  return donors;
+  return {donors, total};
 }
 
 export async function findDonorByIdService(id: string) {

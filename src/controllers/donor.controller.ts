@@ -17,9 +17,15 @@ export async function createDonorController(req: Request, res: Response) {
 
 export async function findAllDonorsController(req: Request, res: Response) {
   const { page, limit } = paginationSchema.parse(req.query);
-  const donors = await findAllDonorsService(page, limit);
 
-  return res.status(200).json(donors);
+  const name = 
+    typeof req.query.name === 'string'
+      ? req.query.name
+      : undefined;
+
+  const result = await findAllDonorsService(page, limit, name);
+
+  return res.status(200).json(result.donors);
 }
 
 export async function findDonorByIdController(req: Request, res: Response) {

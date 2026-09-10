@@ -7,7 +7,7 @@ import app from '../../src/app';
 // Assim a limpeza do banco não depende de cada teste "lembrar" de apagar
 // o que criou, e novos testes só precisam adicionar o e-mail aqui.
 const TEST_EMAILS = [
-   'doador.api@email.com',
+  'doador.api@email.com',
   'jo@email.com',
   'duplicado@email.com',
   'doador1@email.com',
@@ -17,6 +17,8 @@ const TEST_EMAILS = [
   'paginacao1@email.com',
   'paginacao2@email.com',
   'paginacao3@email.com',
+  'doador.busca@email.com',
+  'busca-nome@email.com',
 ];
 
 async function cleanupDonors() {
@@ -169,6 +171,30 @@ describe('POST /donors', () => {
       name: donor.rows[0].name,
       email: donor.rows[0].email,
     });
+  });
+
+  it('deve buscar donor pelo nome', async () => {
+    await pool.query(
+      `
+      INSERT INTO donors (name, email)
+      VALUES ($1, $2)
+      `,
+      ['Doador Busca', 'doador.busca@email.com']
+    )
+
+    const response = await request(app)
+      .get('/donors?name=Busca');
+
+    expect(response.status).toBe(200);
+
+    expect(response.body).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: 'Doador Busca',
+          email: 'doador.busca@email.com',
+        }),
+      ]),
+    );
   });
 
   it('deve atualizar o nome de um donor', async () => {
