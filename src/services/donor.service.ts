@@ -17,8 +17,8 @@ export async function createDonorService(name: string, email: string) {
   return createDonor(name, email);
 }
 
-export async function findAllDonorsService() {
-  const donors = await getAllDonors();
+export async function findAllDonorsService(page: number, limit: number) {
+  const donors = await getAllDonors(page, limit);
 
   return donors;
 }

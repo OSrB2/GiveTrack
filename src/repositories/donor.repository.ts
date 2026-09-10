@@ -26,11 +26,19 @@ export async function createDonor(name: string, email: string) {
   return result.rows[0];
 }
 
-export async function getAllDonors() {
+export async function getAllDonors(page: number, limit: number) {
+  const offset = (page - 1) * limit;
   const result = await pool.query(
-    `SELECT * FROM donors 
-    WHERE deleted_at IS NULL`,
+    `
+    SELECT * FROM donors 
+    WHERE deleted_at IS NULL
+    ORDER BY created_at DESC
+    LIMIT $1
+    OFFSET $2
+    `,
+    [limit, offset],
   );
+
   return result.rows;
 }
 
@@ -39,7 +47,7 @@ export async function findDonorById(id: string) {
     `
     SELECT * FROM donors 
     WHERE id = $1
-      AND deleted_at is NULL`,
+      AND deleted_at IS NULL`,
       [id]
   );
   return result.rows[0];

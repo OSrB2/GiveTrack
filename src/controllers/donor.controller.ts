@@ -16,7 +16,10 @@ export async function createDonorController(req: Request, res: Response) {
 }
 
 export async function findAllDonorsController(req: Request, res: Response) {
-  const donors = await findAllDonorsService();
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+
+  const donors = await findAllDonorsService(page, limit);
 
   return res.status(200).json(donors);
 }
