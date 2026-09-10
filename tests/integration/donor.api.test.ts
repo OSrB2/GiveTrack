@@ -7,13 +7,16 @@ import app from '../../src/app';
 // Assim a limpeza do banco não depende de cada teste "lembrar" de apagar
 // o que criou, e novos testes só precisam adicionar o e-mail aqui.
 const TEST_EMAILS = [
-  'doador.api@email.com',
+   'doador.api@email.com',
   'jo@email.com',
   'duplicado@email.com',
   'doador1@email.com',
   'doador2@email.com',
   'teste-get-id@email.com',
   'patch-donor@email.com',
+  'paginacao1@email.com',
+  'paginacao2@email.com',
+  'paginacao3@email.com',
 ];
 
 async function cleanupDonors() {
